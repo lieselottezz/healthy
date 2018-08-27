@@ -43,6 +43,6 @@ public class WeightAdapter extends ArrayAdapter {
         _date.setText(_row.getDate());
         _weight.setText(Integer.toString(_row.getWeight()));
         _status.setText(_row.getStatus());
-        return super.getView(position, convertView, parent);
+        return _weightItem;
     }
 }
