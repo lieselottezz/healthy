@@ -27,6 +27,7 @@ public class BMIFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initCalculateBtn();
+        initBackBtn();
     }
 
     void initCalculateBtn() {
@@ -53,6 +54,22 @@ public class BMIFragment extends Fragment {
                     _bmivalueTxtView.setText(_bmiStr);
                 }
 
+            }
+        });
+    }
+
+    void initBackBtn() {
+        // Config back button
+        Button _backBtn = getView().findViewById(R.id.bmi_back_btn);
+        _backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("BMI", "BACK TO MENU");
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_view, new MenuFragment())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

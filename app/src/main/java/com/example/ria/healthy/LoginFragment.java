@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment {
                         Log.d("LOGIN", "GOTO BMI");
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.main_view, new BMIFragment())
+                                .replace(R.id.main_view, new MenuFragment())
                                 .addToBackStack(null)
                                 .commit();
                     }
