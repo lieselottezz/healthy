@@ -13,7 +13,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class LoginFragment extends Fragment {
+
+    private FirebaseAuth mAuth;
+
     @Nullable
     @Override
     public View onCreateView(
@@ -26,6 +35,15 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_view, new MenuFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
         initLoginBtn();
         initRegisterBtn();
     }
@@ -36,37 +54,23 @@ public class LoginFragment extends Fragment {
         _loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText _userId = getView().findViewById(R.id.login_user_email);
+                EditText _userEmail = getView().findViewById(R.id.login_user_email);
                 EditText _password = getView().findViewById(R.id.login_user_password);
-                String _userIdStr = _userId.getText().toString();
+                String _userEmailStr = _userEmail.getText().toString();
                 String _passwordStr = _password.getText().toString();
                 Log.d("LOGIN", "On click");
-                Log.d("LOGIN", "USER ID = " + _userIdStr);
+                Log.d("LOGIN", "USER EMAIL = " + _userEmail);
                 Log.d("LOGIN", "PASSWORD = " + _passwordStr);
 
-                if (_userIdStr.isEmpty() || _passwordStr.isEmpty()) {
+                if (_userEmailStr.isEmpty() || _passwordStr.isEmpty()) {
                     Log.d("LOGIN", "USER OR PASSWORD IS EMPTY");
                     Toast.makeText(
-                            getActivity(),"Please enter username or password",Toast.LENGTH_SHORT
+                            getActivity(),"Please enter your email or password",Toast.LENGTH_SHORT
                     ).show();
                 }
                 else {
-                    if (_userIdStr.equals("admin") && _passwordStr.equals("admin")) {
-                        Log.d("LOGIN", "GOTO BMI");
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.main_view, new MenuFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                    else {
-                        Log.d("LOGIN", "INVALID USER OR PASSWORD");
-                        Toast.makeText(
-                                getActivity(),"Invalid username or password", Toast.LENGTH_SHORT
-                        ).show();
-                    }
+                    signInWithEmail(_userEmailStr, _passwordStr);
                 }
-
             }
         });
     }
@@ -83,6 +87,31 @@ public class LoginFragment extends Fragment {
                         .replace(R.id.main_view, new RegisterFragment())
                         .addToBackStack(null)
                         .commit();
+            }
+        });
+    }
+
+    void signInWithEmail(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("LOGIN", "signInWithEmail:success");
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_view, new MenuFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+                else {
+                    Log.d("LOGIN", "signInWithEmail:failure", task.getException());
+                    mAuth.signOut();
+                    Toast.makeText(
+                            getActivity(),"Can't Login",Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
     }

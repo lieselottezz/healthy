@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterFragment extends Fragment {
 
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth;
 
     @Nullable
     @Override
@@ -40,33 +40,21 @@ public class RegisterFragment extends Fragment {
         _registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Get all required string
                 EditText _email = getView().findViewById(R.id.register_email);
                 EditText _password = getView().findViewById(R.id.register_password);
                 EditText _confirmPassword = getView().findViewById(R.id.register_confirm_password);
                 String _emailStr = _email.getText().toString();
                 String _passwordStr = _password.getText().toString();
                 String _confirmPasswordStr = _confirmPassword.getText().toString();
+                // Checking correctness of password
                 initCheckPassword(_emailStr, _passwordStr, _confirmPasswordStr);
-//                    if (_emailStr.equals("admin")) {
-//                        Log.d("REGISTER", "USER ALREADY EXIST");
-//                        Toast.makeText(
-//                                getActivity(),"Username is already exist", Toast.LENGTH_SHORT
-//                        ).show();
-//                    }
-//                    else {
-//                        Log.d("REGISTER", "GOTO BMI");
-//                        getActivity().getSupportFragmentManager()
-//                                .beginTransaction()
-//                                .replace(R.id.main_view, new BMIFragment())
-//                                .addToBackStack(null)
-//                                .commit();
-//                    }
-//                }
             }
         });
     }
 
     void initCheckPassword (String _emailStr, String _passwordStr, String _confirmPasswordStr) {
+        // Check empty fields
         if (_emailStr.isEmpty() || _passwordStr.isEmpty() || _confirmPasswordStr.isEmpty()) {
             Log.d("REGISTER", "FIELD IS EMPTY");
             Toast.makeText(
@@ -74,18 +62,21 @@ public class RegisterFragment extends Fragment {
             ).show();
         }
         else {
+            // Check length of password
             if (_passwordStr.length() < 6) {
                 Log.d("REGISTER", "LENGTH OF PASSWORD < 6");
                 Toast.makeText(
                         getActivity(),"Please fill out the password at least 6 characters", Toast.LENGTH_SHORT
                 ).show();
             }
+            // Check confirm password
             else if (_passwordStr.equals(_confirmPasswordStr) != true) {
                 Log.d("REGISTER", "PASSWORD DOESN'T MATCH THE CONFIRM PASSWORD");
                 Toast.makeText(
                         getActivity(),"Password does not match the confirm password", Toast.LENGTH_SHORT
                 ).show();
             }
+            // Going here if the password is correct by the statement
             else {
                 Log.d("REGISTER", "PASSWORD IS CORRECT BY STATEMENT");
                 createAccount(_emailStr, _passwordStr);
@@ -94,20 +85,23 @@ public class RegisterFragment extends Fragment {
     }
 
     void createAccount (String _emailStr, String _passwordStr) {
-        mAuth.createUserWithEmailAndPassword(_emailStr, _passwordStr).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        // Create account with email
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.createUserWithEmailAndPassword(_emailStr, _passwordStr)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 Log.d("REGISTER", "SUCCESS TO SEND VERIFIED EMAIL");
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser _user = mAuth.getCurrentUser();
+                // send verified email
                 sendVerifiedEmail(_user);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("REGISTER", "FAIL TO SEND VERIFIED EMAIL");
+                Log.d("REGISTER", e.getMessage());
                 Toast.makeText(
-                        getActivity(),"Can't create an account", Toast.LENGTH_SHORT
+                        getActivity(), e.getMessage(), Toast.LENGTH_SHORT
                 ).show();
             }
         });
@@ -118,6 +112,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("REGISTER", "ALREADY SENT");
+                mAuth.signOut();
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_view, new LoginFragment())
