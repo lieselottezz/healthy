@@ -12,29 +12,12 @@
         android:layout_height="match_parent"></FrameLayout>
 
     <EditText
-        android:id="@+id/register_username"
+        android:id="@+id/register_email"
         android:drawableLeft="@drawable/ic_username"
         android:layout_marginTop="15dp"
-        android:hint="@string/user_id"
+        android:hint="@string/user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-     <EditText
-         android:id="@+id/register_name"
-         android:drawableLeft="@drawable/ic_name"
-         android:layout_marginTop="15dp"
-         android:hint="@string/name"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/register_age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@drawable/ic_age"
-        android:hint="@string/age" />
 
     <EditText
         android:id="@+id/register_password"
@@ -42,6 +25,15 @@
         android:inputType="textPassword"
         android:layout_marginTop="15dp"
         android:hint="@string/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/register_confirm_password"
+        android:drawableLeft="@drawable/ic_password"
+        android:inputType="textPassword"
+        android:layout_marginTop="15dp"
+        android:hint="@string/confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

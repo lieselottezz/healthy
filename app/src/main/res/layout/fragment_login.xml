@@ -31,10 +31,10 @@
                     android:layout_gravity="center"/>
 
                 <EditText
-                    android:id="@+id/login_user_id"
+                    android:id="@+id/login_user_email"
                     android:drawableLeft="@drawable/ic_username"
                     android:layout_marginTop="15dp"
-                    android:hint="@string/user_id"
+                    android:hint="@string/user_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
