@@ -60,7 +60,6 @@ public class LoginFragment extends Fragment {
                 String _passwordStr = _password.getText().toString();
                 Log.d("LOGIN", "On click");
                 Log.d("LOGIN", "USER EMAIL = " + _userEmail);
-                Log.d("LOGIN", "PASSWORD = " + _passwordStr);
 
                 if (_userEmailStr.isEmpty() || _passwordStr.isEmpty()) {
                     Log.d("LOGIN", "USER OR PASSWORD IS EMPTY");

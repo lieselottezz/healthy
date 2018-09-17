@@ -33,7 +33,7 @@ public class MenuFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        Log.d("MENU", user.getEmail());
+        Log.d("MENU", "Current user: " + user.getEmail());
 
         _menu.clear();
         _menu.add("BMI");

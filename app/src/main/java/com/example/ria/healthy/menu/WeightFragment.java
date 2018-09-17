@@ -13,12 +13,25 @@ import android.widget.ListView;
 
 import com.example.ria.healthy.R;
 import com.example.ria.healthy.WeightFormFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class WeightFragment extends Fragment{
 
     ArrayList<Weight> weights = new ArrayList<>();
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseFirestore mdb = FirebaseFirestore.getInstance();
 
     @Nullable
     @Override
@@ -30,17 +43,41 @@ public class WeightFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initAddBtn();
-        weights.add(new Weight("01 JAN 2018", 63, "UP"));
-        weights.add(new Weight("02 JAN 2018", 64, "DOWN"));
-        weights.add(new Weight("03 JAN 2018", 63, "UP"));
+
+        // Intialize ListView of history
 
         ListView _weightList = getView().findViewById(R.id.weight_list);
-        WeightAdapter _weightAdapter = new WeightAdapter(
+        final WeightAdapter _weightAdapter = new WeightAdapter(
                 getActivity(),
                 R.layout.fragment_weight_item,
                 weights
         );
         _weightList.setAdapter(_weightAdapter);
+
+        // Get object from Firestore
+
+        weights.clear();
+
+        mdb.collection("myfitness")
+                .document(auth.getCurrentUser().getUid())
+                .collection("weight")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot qsnap) {
+                        for (QueryDocumentSnapshot doc : qsnap) {
+                            Log.d("WEIGHTFRAGMENT", doc.toObject(Weight.class).getDate());
+                            weights.add(doc.toObject(Weight.class));
+                            _weightAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("WEIGHTFRAGMENT", e.getMessage());
+                    }
+                });
     }
 
     void initAddBtn() {

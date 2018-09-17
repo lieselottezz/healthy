@@ -38,11 +38,11 @@ public class WeightAdapter extends ArrayAdapter {
                 false);
         TextView _date = _weightItem.findViewById(R.id.weight_item_date);
         TextView _weight = _weightItem.findViewById(R.id.weight_item_weight);
-        TextView _status = _weightItem.findViewById(R.id.weight_item_status);
+//        TextView _status = _weightItem.findViewById(R.id.weight_item_status);
         Weight _row = weights.get(position);
         _date.setText(_row.getDate());
         _weight.setText(Integer.toString(_row.getWeight()));
-        _status.setText(_row.getStatus());
+//        _status.setText(_row.getStatus());
         return _weightItem;
     }
 }
