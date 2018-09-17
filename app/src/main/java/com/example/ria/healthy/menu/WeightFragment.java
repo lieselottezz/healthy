@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class WeightFragment extends Fragment{
 
@@ -68,6 +69,7 @@ public class WeightFragment extends Fragment{
                         for (QueryDocumentSnapshot doc : qsnap) {
                             Log.d("WEIGHTFRAGMENT", doc.toObject(Weight.class).getDate());
                             weights.add(doc.toObject(Weight.class));
+                            Collections.sort(weights);
                             _weightAdapter.notifyDataSetChanged();
                         }
                     }
