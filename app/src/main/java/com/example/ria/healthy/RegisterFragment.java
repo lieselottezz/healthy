@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,78 +30,64 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initBackBtn();
         initRegisterBtn();
     }
 
     void initRegisterBtn() {
-        // Config register button
-        Button _registerBtn = getView().findViewById(R.id.register_register_btn);
-        _registerBtn.setOnClickListener(new View.OnClickListener() {
+        Button registerBtn = getView().findViewById(R.id.register_register_btn);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get all required string
-                EditText _email = getView().findViewById(R.id.register_email);
-                EditText _password = getView().findViewById(R.id.register_password);
-                EditText _confirmPassword = getView().findViewById(R.id.register_confirm_password);
-                String _emailStr = _email.getText().toString();
-                String _passwordStr = _password.getText().toString();
-                String _confirmPasswordStr = _confirmPassword.getText().toString();
-                // Checking correctness of password
-                initCheckPassword(_emailStr, _passwordStr, _confirmPasswordStr);
+                EditText email = getView().findViewById(R.id.register_email);
+                EditText password = getView().findViewById(R.id.register_password);
+                EditText confirmPassword = getView().findViewById(R.id.register_confirm_password);
+                String emailStr = email.getText().toString();
+                String passwordStr = password.getText().toString();
+                String confirmPasswordStr = confirmPassword.getText().toString();
+                if (passwordChecker(emailStr, passwordStr, confirmPasswordStr)) {
+                    Log.d("REGISTERFRAGMENT", "The received information is correct");
+                    createAccount(emailStr, passwordStr);
+                }
             }
         });
     }
 
-    void initCheckPassword (String _emailStr, String _passwordStr, String _confirmPasswordStr) {
-        // Check empty fields
-        if (_emailStr.isEmpty() || _passwordStr.isEmpty() || _confirmPasswordStr.isEmpty()) {
-            Log.d("REGISTER", "FIELD IS EMPTY");
-            Toast.makeText(
-                    getActivity(),"Please fill out your information in the empty field", Toast.LENGTH_SHORT
-            ).show();
+    boolean passwordChecker (String emailStr, String passwordStr, String confirmPasswordStr) {
+        if (emailStr.isEmpty() || passwordStr.isEmpty() || confirmPasswordStr.isEmpty()) {
+            Log.d("REGISTERFRAGMENT", "Field is empty");
+            Utility.toast(getActivity(), "Please fill out your information in the empty field");
         }
         else {
-            // Check length of password
-            if (_passwordStr.length() < 6) {
-                Log.d("REGISTER", "LENGTH OF PASSWORD < 6");
-                Toast.makeText(
-                        getActivity(),"Please fill out the password at least 6 characters", Toast.LENGTH_SHORT
-                ).show();
+            if (passwordStr.length() < 6) {
+                Log.d("REGISTERFRAGMENT", "Password length < 6");
+                Utility.toast(getActivity(), "Please fill out the password at least 6 characters");
             }
-            // Check confirm password
-            else if (_passwordStr.equals(_confirmPasswordStr) != true) {
-                Log.d("REGISTER", "PASSWORD DOESN'T MATCH THE CONFIRM PASSWORD");
-                Toast.makeText(
-                        getActivity(),"Password does not match the confirm password", Toast.LENGTH_SHORT
-                ).show();
+            else if (passwordStr.equals(confirmPasswordStr) != true) {
+                Log.d("REGISTERFRAGMENT", "Password does not match the confirm password");
+                Utility.toast(getActivity(), "Password does not match the confirm password");
             }
-            // Going here if the password is correct by the statement
             else {
-                Log.d("REGISTER", "PASSWORD IS CORRECT BY STATEMENT");
-                createAccount(_emailStr, _passwordStr);
+                return true;
             }
         }
+        return false;
     }
 
-    void createAccount (String _emailStr, String _passwordStr) {
-        // Create account with email
+    void createAccount (String emailStr, String passwordStr) {
         mAuth = FirebaseAuth.getInstance();
-        mAuth.createUserWithEmailAndPassword(_emailStr, _passwordStr)
+        mAuth.createUserWithEmailAndPassword(emailStr, passwordStr)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                Log.d("REGISTER", "SUCCESS TO SEND VERIFIED EMAIL");
-                FirebaseUser _user = mAuth.getCurrentUser();
-                // send verified email
-                sendVerifiedEmail(_user);
+                FirebaseUser user = mAuth.getCurrentUser();
+                sendVerifiedEmail(user);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("REGISTER", e.getMessage());
-                Toast.makeText(
-                        getActivity(), e.getMessage(), Toast.LENGTH_SHORT
-                ).show();
+                Log.d("REGISTERFRAGMENT", e.getMessage());
+                Utility.toast(getActivity(), "Unable to create account");
             }
         });
     }
@@ -111,21 +96,26 @@ public class RegisterFragment extends Fragment {
         _user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d("REGISTER", "ALREADY SENT");
+                Log.d("REGISTERFRAGMENT", "Create account success");
                 mAuth.signOut();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_view, new LoginFragment())
-                        .addToBackStack(null)
-                        .commit();
+                Utility.goTo(getActivity(), new LoginFragment());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("REGISTER", "CAN'T SEND VERIFIED EMAIL");
-                Toast.makeText(
-                        getActivity(),"Can't send a verified email", Toast.LENGTH_SHORT
-                ).show();
+                Log.d("REGISTERFRAGMENT", e.getMessage());
+                Utility.toast(getActivity(), "Can't send a verified email");
+            }
+        });
+    }
+
+    void initBackBtn() {
+        Button backBtn = getView().findViewById(R.id.register_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("REGISTERFRAGMENT", "Goto LoginFragment");
+                Utility.goTo(getActivity(), new LoginFragment());
             }
         });
     }

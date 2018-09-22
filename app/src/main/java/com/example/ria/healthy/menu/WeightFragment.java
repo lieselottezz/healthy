@@ -11,16 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.ria.healthy.MenuFragment;
 import com.example.ria.healthy.R;
+import com.example.ria.healthy.Utility;
 import com.example.ria.healthy.WeightFormFragment;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -29,36 +28,32 @@ import java.util.Collections;
 
 public class WeightFragment extends Fragment{
 
-    ArrayList<Weight> weights = new ArrayList<>();
-
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseFirestore mdb = FirebaseFirestore.getInstance();
+    private ArrayList<Weight> weights = new ArrayList<>();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mdb = FirebaseFirestore.getInstance();
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_weight, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initBackBtn();
         initAddBtn();
-
-        // Intialize ListView of history
-
-        ListView _weightList = getView().findViewById(R.id.weight_list);
-        final WeightAdapter _weightAdapter = new WeightAdapter(
+        ListView weightList = getView().findViewById(R.id.weight_list);
+        final WeightAdapter weightAdapter = new WeightAdapter(
                 getActivity(),
                 R.layout.fragment_weight_item,
                 weights
         );
-        _weightList.setAdapter(_weightAdapter);
-
-        // Get object from Firestore
-
+        weightList.setAdapter(weightAdapter);
         weights.clear();
-
+        Log.d("WEIGHTFRAGMENT", "Loading history...");
         mdb.collection("myfitness")
                 .document(auth.getCurrentUser().getUid())
                 .collection("weight")
@@ -67,34 +62,40 @@ public class WeightFragment extends Fragment{
                     @Override
                     public void onSuccess(QuerySnapshot qsnap) {
                         for (QueryDocumentSnapshot doc : qsnap) {
-                            Log.d("WEIGHTFRAGMENT", doc.toObject(Weight.class).getDate());
                             weights.add(doc.toObject(Weight.class));
                             Collections.sort(weights);
-                            _weightAdapter.notifyDataSetChanged();
+                            weightAdapter.notifyDataSetChanged();
                         }
+                        Log.d("WEIGHTFRAGMENT", "Loading history success");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("WEIGHTFRAGMENT", e.getMessage());
+                        Log.d("WEIGHTFRAGMENT", "Fail to loading history");
                     }
                 });
     }
 
     void initAddBtn() {
-        // Config add weight button
-        Button _addBtn = getView().findViewById(R.id.weight_add_btn);
-        _addBtn.setOnClickListener(new View.OnClickListener() {
+        Button addBtn = getView().findViewById(R.id.weight_add_btn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Weight", "GOTO WEIGHT FORM");
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_view, new WeightFormFragment())
-                        .addToBackStack(null)
-                        .commit();
+                Log.d("WEIGHTFRAGMENT", "Goto WeightFormFragment");
+                Utility.goTo(getActivity(), new WeightFormFragment());
                 }
+        });
+    }
+
+    void initBackBtn() {
+        Button backBtn = getView().findViewById(R.id.weight_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("WEIGHTFRAGMENT", "Goto MenuFragment");
+                Utility.goTo(getActivity(), new MenuFragment());
+            }
         });
     }
 }

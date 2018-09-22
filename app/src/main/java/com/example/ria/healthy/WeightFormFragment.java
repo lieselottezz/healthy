@@ -27,11 +27,10 @@ import java.util.Locale;
 
 public class WeightFormFragment extends Fragment {
 
-    FirebaseFirestore mdb = FirebaseFirestore.getInstance();
-    FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mdb = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
-    // Create object and set listener for DatePicker
-    Calendar calendar = Calendar.getInstance();
+    private Calendar calendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -63,28 +62,21 @@ public class WeightFormFragment extends Fragment {
     }
 
     void initBackBtn() {
-        // Config back button
         Button _backBtn = getView().findViewById(R.id.weight_form_back_btn);
         _backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("WEIGHT FORM", "BACK TO WEIGHT");
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_view, new WeightFragment())
-                        .addToBackStack(null)
-                        .commit();
+                Log.d("WEIGHTFORMFRAGMENT", "Go to WeightFragment");
+                Utility.goTo(getActivity(), new WeightFragment());
             }
         });
     }
 
     void initSaveBtn() {
-        // Config save button
         Button _saveBtn = getView().findViewById(R.id.weight_form_save_btn);
         _saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("WEIGHT FORM", "SAVED");
                 addObj();
             }
         });
@@ -104,13 +96,11 @@ public class WeightFormFragment extends Fragment {
     }
 
     void addObj() {
-        // Add Weight object to firestore
-        EditText _date = getView().findViewById(R.id.weight_form_date);
-        EditText _weight = getView().findViewById(R.id.weight_form_weight);
-        String _dateStr = _date.getText().toString();
-        Log.d("WEIGHT FORM", _dateStr);
-        int _weightInt = Integer.parseInt(_weight.getText().toString());
-        Weight _weightObj = new Weight(_dateStr, _weightInt);
+        EditText date = getView().findViewById(R.id.weight_form_date);
+        EditText weight = getView().findViewById(R.id.weight_form_weight);
+        String _dateStr = date.getText().toString();
+        int weightInt = Integer.parseInt(weight.getText().toString());
+        Weight _weightObj = new Weight(_dateStr, weightInt);
         mdb.collection("myfitness")
                 .document(auth.getCurrentUser().getUid())
                 .collection("weight")
@@ -119,17 +109,14 @@ public class WeightFormFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(
-                                getActivity(),"Saved",Toast.LENGTH_SHORT
-                        ).show();
+                        Log.d("WEIGHTFORMFRAGMENT", "The information was saved");
+                        Utility.toast(getActivity(), "Saved");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("WEIGHT FORM", e.getMessage());
-                Toast.makeText(
-                        getActivity(),"Failed",Toast.LENGTH_SHORT
-                ).show();
+                Log.d("WEIGHTFORMFRAGMENT", "Fail to save the information");
+                Utility.toast(getActivity(), "Failed");
             }
         });
     }

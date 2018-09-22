@@ -11,6 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
 
+    <Button
+        android:id="@+id/register_back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back" />
+
     <EditText
         android:id="@+id/register_email"
         android:drawableLeft="@drawable/ic_username"

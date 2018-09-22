@@ -6,10 +6,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Weight implements Comparable<Weight> {
+
     String date;
     int weight;
 
-    public Weight() {}
+    public Weight() {
+
+    }
 
     @Override
     public int compareTo(@NonNull Weight weight) {

@@ -31,45 +31,39 @@ public class BMIFragment extends Fragment {
     }
 
     void initCalculateBtn() {
-        // Config calculate button
-        Button _calculateBtn = getView().findViewById(R.id.bmi_calculate_btn);
-        _calculateBtn.setOnClickListener(new View.OnClickListener() {
+        Button calculateBtn = getView().findViewById(R.id.bmi_calculate_btn);
+        calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText _height = getView().findViewById(R.id.bmi_height);
-                EditText _weight = getView().findViewById(R.id.bmi_weight);
-                TextView _yourbmiTxtView = getView().findViewById(R.id.bmi_yourbmi_txtview);
-                TextView _bmivalueTxtView = getView().findViewById(R.id.bmi_bmi_value_txtview);
-                if (_height.getText().toString().isEmpty() || _weight.getText().toString().isEmpty()) {
-                    Log.d("BMI", "FIELD IS EMPTY");
-                }
-                else {
-                    double _heightValue = Double.parseDouble(_height.getText().toString()) * 0.01;
-                    double _weightValue = Double.parseDouble(_weight.getText().toString());
-                    double _bmiValue = _weightValue / (_heightValue * _heightValue);
+                EditText height = getView().findViewById(R.id.bmi_height);
+                EditText weight = getView().findViewById(R.id.bmi_weight);
+                String heightStr =  height.getText().toString();
+                String weightStr =  weight.getText().toString();
+                TextView yourbmiTxtView = getView().findViewById(R.id.bmi_yourbmi_txtview);
+                TextView bmivalueTxtView = getView().findViewById(R.id.bmi_bmi_value_txtview);
+                if (!heightStr.isEmpty() || !weightStr.isEmpty()) {
+                    double heightValue = Double.parseDouble(heightStr) * 0.01;
+                    double weightValue = Double.parseDouble(weightStr);
+                    double bmiValue = weightValue / (heightValue * heightValue);
                     DecimalFormat df = new DecimalFormat(".##");
-                    String _bmiStr = df.format(_bmiValue);
-                    Log.d("BMI", "BMI VALUE IS " + _bmiStr);
-                    _yourbmiTxtView.setText("Your BMI");
-                    _bmivalueTxtView.setText(_bmiStr);
+                    String _bmiStr = df.format(bmiValue);
+                    Log.d("BMIFRAGMENT", "BMI = " + _bmiStr);
+                    yourbmiTxtView.setText("Your BMI");
+                    bmivalueTxtView.setText(_bmiStr);
+                } else {
+                    Log.d("BMIFRAGMENT", "Field is empty");
                 }
-
             }
         });
     }
 
     void initBackBtn() {
-        // Config back button
-        Button _backBtn = getView().findViewById(R.id.bmi_back_btn);
-        _backBtn.setOnClickListener(new View.OnClickListener() {
+        Button backBtn = getView().findViewById(R.id.bmi_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("BMI", "BACK TO MENU");
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_view, new MenuFragment())
-                        .addToBackStack(null)
-                        .commit();
+                Log.d("BMIFRAGMENT", "Goto MenuFragment");
+                Utility.goTo(getActivity(), new MenuFragment());
             }
         });
     }

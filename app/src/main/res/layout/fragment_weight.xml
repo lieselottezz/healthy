@@ -7,6 +7,12 @@
     android:padding="35dp">
 
     <Button
+        android:id="@+id/weight_back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back" />
+
+    <Button
         android:id="@+id/weight_add_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
