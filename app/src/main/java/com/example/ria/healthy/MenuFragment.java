@@ -53,13 +53,13 @@ public class MenuFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (menu.get(i).equals("BMI")) {
-                    Log.d("MENUFRAGEMNT", "Goto BMIFragment");
+                    Log.d("MENUFRAGMENT", "Goto BMIFragment");
                     Utility.goTo(getActivity(), new BMIFragment());
                 } else if (menu.get(i).equals("Weight")) {
-                    Log.d("MENUFRAGEMNT", "Goto WeightFragment");
+                    Log.d("MENUFRAGMENT", "Goto WeightFragment");
                     Utility.goTo(getActivity(), new WeightFragment());
                 } else if (menu.get(i).equals("Sign out")) {
-                    Log.d("MENUFRAGEMNT", "Sign out");
+                    Log.d("MENUFRAGMENT", "Sign out");
                     mAuth.signOut();
                     Utility.goTo(getActivity(), new LoginFragment());
                 }
