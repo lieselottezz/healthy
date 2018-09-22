@@ -59,17 +59,14 @@ public class RegisterFragment extends Fragment {
         if (emailStr.isEmpty() || passwordStr.isEmpty() || confirmPasswordStr.isEmpty()) {
             Log.d("REGISTERFRAGMENT", "Field is empty");
             Utility.toast(getActivity(), "Please fill out your information in the empty field");
-        }
-        else {
+        } else {
             if (passwordStr.length() < 6) {
                 Log.d("REGISTERFRAGMENT", "Password length < 6");
                 Utility.toast(getActivity(), "Please fill out the password at least 6 characters");
-            }
-            else if (passwordStr.equals(confirmPasswordStr) != true) {
+            } else if (passwordStr.equals(confirmPasswordStr) != true) {
                 Log.d("REGISTERFRAGMENT", "Password does not match the confirm password");
                 Utility.toast(getActivity(), "Password does not match the confirm password");
-            }
-            else {
+            } else {
                 return true;
             }
         }

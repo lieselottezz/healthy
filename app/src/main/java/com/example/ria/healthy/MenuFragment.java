@@ -55,12 +55,10 @@ public class MenuFragment extends Fragment{
                 if (menu.get(i).equals("BMI")) {
                     Log.d("MENUFRAGEMNT", "Goto BMIFragment");
                     Utility.goTo(getActivity(), new BMIFragment());
-                }
-                else if (menu.get(i).equals("Weight")) {
+                } else if (menu.get(i).equals("Weight")) {
                     Log.d("MENUFRAGEMNT", "Goto WeightFragment");
                     Utility.goTo(getActivity(), new WeightFragment());
-                }
-                else if (menu.get(i).equals("Sign out")) {
+                } else if (menu.get(i).equals("Sign out")) {
                     Log.d("MENUFRAGEMNT", "Sign out");
                     mAuth.signOut();
                     Utility.goTo(getActivity(), new LoginFragment());
