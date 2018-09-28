@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "576512072319",
+    "firebase_url": "https://healthy-b4e9a.firebaseio.com",
+    "project_id": "healthy-b4e9a",
+    "storage_bucket": "healthy-b4e9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576512072319:android:977201cf93e0c70e",
+        "android_client_info": {
+          "package_name": "com.example.ria.healthy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576512072319-9qsg62sf6rot427r5q1jn3orvpi8h7ko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDExXo6w-dFxDjKAzFPU86Z1H2_CGr7PLE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
