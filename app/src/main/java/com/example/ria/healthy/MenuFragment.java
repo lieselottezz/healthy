@@ -12,7 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.ria.healthy.menu.WeightFragment;
+import com.example.ria.healthy.sleep.SleepFragment;
+import com.example.ria.healthy.utility.Extension;
+import com.example.ria.healthy.weight.WeightFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class MenuFragment extends Fragment{
         menu.clear();
         menu.add("BMI");
         menu.add("Weight");
+        menu.add("Sleep");
         menu.add("Sign out");
         initMenu();
     }
@@ -54,14 +57,17 @@ public class MenuFragment extends Fragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (menu.get(i).equals("BMI")) {
                     Log.d("MENUFRAGMENT", "Goto BMIFragment");
-                    Utility.goTo(getActivity(), new BMIFragment());
+                    Extension.goTo(getActivity(), new BMIFragment());
                 } else if (menu.get(i).equals("Weight")) {
                     Log.d("MENUFRAGMENT", "Goto WeightFragment");
-                    Utility.goTo(getActivity(), new WeightFragment());
+                    Extension.goTo(getActivity(), new WeightFragment());
+                } else if (menu.get(i).equals("Sleep")) {
+                    Log.d("MENUFRAGMENT", "Goto SleepFragment");
+                    Extension.goTo(getActivity(), new SleepFragment());
                 } else if (menu.get(i).equals("Sign out")) {
                     Log.d("MENUFRAGMENT", "Sign out");
                     mAuth.signOut();
-                    Utility.goTo(getActivity(), new LoginFragment());
+                    Extension.goTo(getActivity(), new LoginFragment());
                 }
             }
         });

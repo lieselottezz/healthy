@@ -1,4 +1,4 @@
-package com.example.ria.healthy.menu;
+package com.example.ria.healthy.weight;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

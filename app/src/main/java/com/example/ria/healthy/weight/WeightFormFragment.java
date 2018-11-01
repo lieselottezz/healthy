@@ -1,4 +1,4 @@
-package com.example.ria.healthy;
+package com.example.ria.healthy.weight;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.ria.healthy.menu.Weight;
-import com.example.ria.healthy.menu.WeightFragment;
+import com.example.ria.healthy.R;
+import com.example.ria.healthy.utility.Extension;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,19 +63,19 @@ public class WeightFormFragment extends Fragment {
     }
 
     void initBackBtn() {
-        Button _backBtn = getView().findViewById(R.id.weight_form_back_btn);
-        _backBtn.setOnClickListener(new View.OnClickListener() {
+        Button backBtn = getView().findViewById(R.id.weight_form_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("WEIGHTFORMFRAGMENT", "Go to WeightFragment");
-                Utility.goTo(getActivity(), new WeightFragment());
+                Extension.goTo(getActivity(), new WeightFragment());
             }
         });
     }
 
     void initSaveBtn() {
-        Button _saveBtn = getView().findViewById(R.id.weight_form_save_btn);
-        _saveBtn.setOnClickListener(new View.OnClickListener() {
+        Button saveBtn = getView().findViewById(R.id.weight_form_save_btn);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addObj();
@@ -100,25 +99,25 @@ public class WeightFormFragment extends Fragment {
     void addObj() {
         EditText date = getView().findViewById(R.id.weight_form_date);
         EditText weight = getView().findViewById(R.id.weight_form_weight);
-        String _dateStr = date.getText().toString();
+        String dateStr = date.getText().toString();
         int weightInt = Integer.parseInt(weight.getText().toString());
-        Weight _weightObj = new Weight(_dateStr, weightInt);
+        Weight weightObj = new Weight(dateStr, weightInt);
         mdb.collection("myfitness")
                 .document(auth.getCurrentUser().getUid())
                 .collection("weight")
-                .document(_dateStr)
-                .set(_weightObj)
+                .document(dateStr)
+                .set(weightObj)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("WEIGHTFORMFRAGMENT", "The information was saved");
-                        Utility.toast(getActivity(), "Saved");
+                        Extension.toast(getActivity(), "Saved");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("WEIGHTFORMFRAGMENT", "Fail to save the information");
-                Utility.toast(getActivity(), "Failed");
+                Extension.toast(getActivity(), "Failed");
             }
         });
     }

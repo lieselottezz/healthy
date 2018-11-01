@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.ria.healthy.utility.Extension;
+
 import java.text.DecimalFormat;
 
 public class BMIFragment extends Fragment {
@@ -63,7 +65,7 @@ public class BMIFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("BMIFRAGMENT", "Goto MenuFragment");
-                Utility.goTo(getActivity(), new MenuFragment());
+                Extension.goTo(getActivity(), new MenuFragment());
             }
         });
     }

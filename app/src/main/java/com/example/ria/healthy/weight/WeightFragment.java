@@ -1,4 +1,4 @@
-package com.example.ria.healthy.menu;
+package com.example.ria.healthy.weight;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,8 +13,7 @@ import android.widget.ListView;
 
 import com.example.ria.healthy.MenuFragment;
 import com.example.ria.healthy.R;
-import com.example.ria.healthy.Utility;
-import com.example.ria.healthy.WeightFormFragment;
+import com.example.ria.healthy.utility.Extension;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +44,32 @@ public class WeightFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
         initBackBtn();
         initAddBtn();
+        initHistory();
+    }
+
+    void initBackBtn() {
+        Button backBtn = getView().findViewById(R.id.weight_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("WEIGHTFRAGMENT", "Goto MenuFragment");
+                Extension.goTo(getActivity(), new MenuFragment());
+            }
+        });
+    }
+
+    void initAddBtn() {
+        Button addBtn = getView().findViewById(R.id.weight_add_btn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("WEIGHTFRAGMENT", "Goto WeightFormFragment");
+                Extension.goTo(getActivity(), new WeightFormFragment());
+            }
+        });
+    }
+
+    void initHistory() {
         ListView weightList = getView().findViewById(R.id.weight_list);
         final WeightAdapter weightAdapter = new WeightAdapter(
                 getActivity(),
@@ -75,27 +100,5 @@ public class WeightFragment extends Fragment{
                         Log.d("WEIGHTFRAGMENT", "Fail to loading history");
                     }
                 });
-    }
-
-    void initAddBtn() {
-        Button addBtn = getView().findViewById(R.id.weight_add_btn);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("WEIGHTFRAGMENT", "Goto WeightFormFragment");
-                Utility.goTo(getActivity(), new WeightFormFragment());
-                }
-        });
-    }
-
-    void initBackBtn() {
-        Button backBtn = getView().findViewById(R.id.weight_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("WEIGHTFRAGMENT", "Goto MenuFragment");
-                Utility.goTo(getActivity(), new MenuFragment());
-            }
-        });
     }
 }

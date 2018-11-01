@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.ria.healthy.utility.Extension;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -38,7 +39,7 @@ public class LoginFragment extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             Log.d("LOGINFRAGMENT", "Already login with " + currentUser.getEmail());
-            Utility.goTo(getActivity(), new MenuFragment());
+            Extension.goTo(getActivity(), new MenuFragment());
         }
         initLoginBtn();
         initRegisterBtn();
@@ -55,7 +56,7 @@ public class LoginFragment extends Fragment {
                 String passwordStr = password.getText().toString();
                 if (userEmailStr.isEmpty() || passwordStr.isEmpty()) {
                     Log.d("LOGINFRAGMENT", "Field is empty");
-                    Utility.toast(getActivity(), "Please enter your email or password");
+                    Extension.toast(getActivity(), "Please enter your email or password");
                 } else {
                     Log.d("LOGINFRAGMENT", "Login with " + userEmailStr);
                     signInWithEmail(userEmailStr, passwordStr);
@@ -70,7 +71,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("LOGINFRAGMENT", "Go to RegisterFragment");
-                Utility.goTo(getActivity(), new RegisterFragment());
+                Extension.goTo(getActivity(), new RegisterFragment());
             }
         });
     }
@@ -82,10 +83,10 @@ public class LoginFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                     Log.d("LOGINFRAGMENT", "Login success");
-                    Utility.goTo(getActivity(), new MenuFragment());
+                    Extension.goTo(getActivity(), new MenuFragment());
                 } else {
                     Log.d("LOGINFRAGMENT", "Login fail", task.getException());
-                    Utility.toast(getActivity(), "Unable to login");
+                    Extension.toast(getActivity(), "Unable to login");
                     mAuth.signOut();
                 }
             }

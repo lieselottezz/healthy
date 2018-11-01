@@ -12,4 +12,8 @@
     <string name="addweight">Add weight</string>
     <string name="save">save</string>
     <string name="dateofweigh">Date of weigh</string>
+    <string name="addsleep">Add sleep</string>
+    <string name="date">Date</string>
+    <string name="sleeptime">Sleep time</string>
+    <string name="wakeuptime">Wake up time</string>
 </resources>

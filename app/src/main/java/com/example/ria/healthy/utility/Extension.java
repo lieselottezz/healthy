@@ -1,10 +1,12 @@
-package com.example.ria.healthy;
+package com.example.ria.healthy.utility;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
-public class Utility extends Fragment{
+import com.example.ria.healthy.R;
+
+public class Extension extends Fragment{
 
     public static void goTo(FragmentActivity act, Fragment other) {
         act.getSupportFragmentManager()

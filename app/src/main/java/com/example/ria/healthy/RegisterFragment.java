@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.ria.healthy.utility.Extension;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -58,14 +59,14 @@ public class RegisterFragment extends Fragment {
     boolean passwordChecker (String emailStr, String passwordStr, String confirmPasswordStr) {
         if (emailStr.isEmpty() || passwordStr.isEmpty() || confirmPasswordStr.isEmpty()) {
             Log.d("REGISTERFRAGMENT", "Field is empty");
-            Utility.toast(getActivity(), "Please fill out your information in the empty field");
+            Extension.toast(getActivity(), "Please fill out your information in the empty field");
         } else {
             if (passwordStr.length() < 6) {
                 Log.d("REGISTERFRAGMENT", "Password length < 6");
-                Utility.toast(getActivity(), "Please fill out the password at least 6 characters");
+                Extension.toast(getActivity(), "Please fill out the password at least 6 characters");
             } else if (passwordStr.equals(confirmPasswordStr) != true) {
                 Log.d("REGISTERFRAGMENT", "Password does not match the confirm password");
-                Utility.toast(getActivity(), "Password does not match the confirm password");
+                Extension.toast(getActivity(), "Password does not match the confirm password");
             } else {
                 return true;
             }
@@ -86,7 +87,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("REGISTERFRAGMENT", e.getMessage());
-                Utility.toast(getActivity(), "Unable to create account");
+                Extension.toast(getActivity(), "Unable to create account");
             }
         });
     }
@@ -97,13 +98,13 @@ public class RegisterFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 Log.d("REGISTERFRAGMENT", "Create account success");
                 mAuth.signOut();
-                Utility.goTo(getActivity(), new LoginFragment());
+                Extension.goTo(getActivity(), new LoginFragment());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("REGISTERFRAGMENT", e.getMessage());
-                Utility.toast(getActivity(), "Can't send a verified email");
+                Extension.toast(getActivity(), "Can't send a verified email");
             }
         });
     }
@@ -114,7 +115,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("REGISTERFRAGMENT", "Goto LoginFragment");
-                Utility.goTo(getActivity(), new LoginFragment());
+                Extension.goTo(getActivity(), new LoginFragment());
             }
         });
     }
