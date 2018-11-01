@@ -26,16 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("DBHelper", tableName);
-        String CREATE_SLEEP_TABLE = String.format("CREATE TABLE IF NOT EXISTS %s " +
-                "(%s INTEGER PRIMARY KEY  AUTOINCREMENT, %s VARCHAR(20), %s VARCHAR(10), %s VARCHAR(10), %s VARCHAR(10))",
-                tableName,
-                Sleep.Column.ID,
-                Sleep.Column.DATE,
-                Sleep.Column.SLEEP_TIME,
-                Sleep.Column.WAKEUP_TIME,
-                Sleep.Column.TOTAL_SLEEP_TIME);
-        Log.d(TAG, CREATE_SLEEP_TABLE);
-        db.execSQL(CREATE_SLEEP_TABLE);
+        createTable();
     }
 
     @Override
@@ -47,22 +38,23 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Sleep> getAllSleepObjects() {
+        if (!isTableExist(tableName)) {
+            createTable();
+        }
         String selectQuery = "SELECT * FROM " + tableName;
         ArrayList<Sleep> sleeps = new ArrayList<>();
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         try {
-            if (cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
-                    Sleep sleep = new Sleep(
-                            cursor.getInt(0),
-                            cursor.getString(1),
-                            cursor.getString(2),
-                            cursor.getString(3),
-                            cursor.getString(4)
-                    );
-                    sleeps.add(sleep);
-                }
+            while (cursor.moveToNext()) {
+                Sleep sleep = new Sleep(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4)
+                );
+                sleeps.add(sleep);
             }
         } catch (SQLiteException e) {
             Log.d("SQLite Error", e.getMessage());
@@ -116,9 +108,35 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-//    public void dropTable() {
-//        db = this.getWritableDatabase();
-//        String DROP_SLEEP_TABLE = "DROP TABLE IF EXISTS " + tableName;
-//        db.execSQL(DROP_SLEEP_TABLE);
-//    }
+    public void createTable() {
+        db = this.getWritableDatabase();
+        String CREATE_SLEEP_TABLE = String.format("CREATE TABLE IF NOT EXISTS %s " +
+                        "(%s INTEGER PRIMARY KEY  AUTOINCREMENT, %s VARCHAR(20), %s VARCHAR(10), %s VARCHAR(10), %s VARCHAR(10))",
+                tableName,
+                Sleep.Column.ID,
+                Sleep.Column.DATE,
+                Sleep.Column.SLEEP_TIME,
+                Sleep.Column.WAKEUP_TIME,
+                Sleep.Column.TOTAL_SLEEP_TIME);
+        Log.d(TAG, CREATE_SLEEP_TABLE);
+        db.execSQL(CREATE_SLEEP_TABLE);
+    }
+
+    public boolean isTableExist(String table_name) {
+        db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '"
+                + table_name + "'", null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                return true;
+            } else {
+                cursor.close();
+                return false;
+            }
+        } else {
+            cursor.close();
+            return false;
+        }
+    }
 }
