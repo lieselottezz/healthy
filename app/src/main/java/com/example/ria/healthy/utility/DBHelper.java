@@ -26,7 +26,16 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("DBHelper", tableName);
-        createTable();
+        String CREATE_SLEEP_TABLE = String.format("CREATE TABLE IF NOT EXISTS %s " +
+                        "(%s INTEGER PRIMARY KEY  AUTOINCREMENT, %s VARCHAR(20), %s VARCHAR(10), %s VARCHAR(10), %s VARCHAR(10))",
+                tableName,
+                Sleep.Column.ID,
+                Sleep.Column.DATE,
+                Sleep.Column.SLEEP_TIME,
+                Sleep.Column.WAKEUP_TIME,
+                Sleep.Column.TOTAL_SLEEP_TIME);
+        Log.d(TAG, CREATE_SLEEP_TABLE);
+        db.execSQL(CREATE_SLEEP_TABLE);
     }
 
     @Override
@@ -101,10 +110,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(Sleep.Column.SLEEP_TIME, sleep.getSleepTime());
         values.put(Sleep.Column.WAKEUP_TIME, sleep.getWakeupTime());
         values.put(Sleep.Column.TOTAL_SLEEP_TIME, sleep.getTotalSleepTime());
-        int row = db.update(tableName,
-                values,
-                Sleep.Column.ID + " = ? ",
-                new String[] { String.valueOf(sleep.getId()) });
+        db.update(tableName, values, Sleep.Column.ID + " = ? ", new String[] { String.valueOf(sleep.getId()) });
         db.close();
     }
 
@@ -120,6 +126,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 Sleep.Column.TOTAL_SLEEP_TIME);
         Log.d(TAG, CREATE_SLEEP_TABLE);
         db.execSQL(CREATE_SLEEP_TABLE);
+        db.close();
     }
 
     public boolean isTableExist(String table_name) {
@@ -129,13 +136,16 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor != null) {
             if (cursor.getCount() > 0) {
                 cursor.close();
+                db.close();
                 return true;
             } else {
                 cursor.close();
+                db.close();
                 return false;
             }
         } else {
             cursor.close();
+            db.close();
             return false;
         }
     }

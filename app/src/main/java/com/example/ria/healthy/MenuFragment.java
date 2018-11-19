@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.ria.healthy.post.PostFragment;
 import com.example.ria.healthy.sleep.SleepFragment;
 import com.example.ria.healthy.utility.Extension;
 import com.example.ria.healthy.weight.WeightFragment;
@@ -40,6 +41,7 @@ public class MenuFragment extends Fragment{
         menu.add("BMI");
         menu.add("Weight");
         menu.add("Sleep");
+        menu.add("Post");
         menu.add("Sign out");
         initMenu();
     }
@@ -64,6 +66,9 @@ public class MenuFragment extends Fragment{
                 } else if (menu.get(i).equals("Sleep")) {
                     Log.d("MENUFRAGMENT", "Goto SleepFragment");
                     Extension.goTo(getActivity(), new SleepFragment());
+                } else if (menu.get(i).equals("Post")) {
+                    Log.d("MENUFRAGMENT", "Goto PostFragment");
+                    Extension.goTo(getActivity(), new PostFragment());
                 } else if (menu.get(i).equals("Sign out")) {
                     Log.d("MENUFRAGMENT", "Sign out");
                     mAuth.signOut();
